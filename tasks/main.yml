@@ -1,0 +1,70 @@
+---
+# tasks file for ansible-role-xrdp
+
+- include_tasks: "{{ ansible_os_family }}.yml"
+
+- name: Retrieving xrdp
+  git:
+    repo: https://github.com/neutrinolabs/xrdp.git
+    dest: /tmp/xrdp
+    recursive: yes
+
+- name: Retrieving xorgxrdp
+  git:
+    repo: https://github.com/neutrinolabs/xorgxrdp.git
+    dest: /tmp/xorgxrdp
+
+- name: Boostrap and configure xrdp
+  shell: ./bootstrap && ./configure
+  args:
+    chdir: /tmp/xrdp
+
+- name: make xrdp
+  make:
+    chdir: /tmp/xrdp
+    target: all
+
+- name: make install xrdp
+  become: yes
+  make:
+    chdir: /tmp/xrdp
+    target: install
+
+- name: Boostrap and configure xorgxrdp
+  shell: ./bootstrap && ./configure XRDP_CFLAGS=-I~/git/neutrino/xrdp/common XRDP_LIBS=" "
+  args:
+    chdir: /tmp/xorgxrdp
+
+- name: make xorgxrdp
+  make:
+    chdir: /tmp/xorgxrdp
+    target: all
+
+- name: make install xorgxrdp
+  become: yes
+  make:
+    chdir: /tmp/xorgxrdp
+    target: install
+
+# - name: Modify startwm.sh (RedHat)
+#   copy:
+#     dest: /etc/xrdp/startwm.sh
+#     src: files/startwm.rhel.sh
+#     owner: root
+#     group: root
+#     mode: 0755
+#   when: ansible_os_family == "RedHat"
+
+- name: Start and enable xrdp
+  become: yes
+  service:
+    name: xrdp
+    enabled: yes
+    state: started
+
+- name: Start and enable xorgxrdp
+  become: yes
+  service:
+    name: xrdp-sesman
+    enabled: yes
+    state: started
