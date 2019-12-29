@@ -3,48 +3,61 @@
 
 - include_tasks: "{{ ansible_os_family }}.yml"
 
+- name: Stat xrdp
+  stat:
+    path: /usr/local/sbin/xrdp
+  register: xrdp
+
 - name: Retrieving xrdp
   git:
     repo: https://github.com/neutrinolabs/xrdp.git
     dest: /tmp/xrdp
     recursive: yes
+  when: not xrdp.stat.exists
 
 - name: Retrieving xorgxrdp
   git:
     repo: https://github.com/neutrinolabs/xorgxrdp.git
     dest: /tmp/xorgxrdp
+  when: not xrdp.stat.exists
 
 - name: Boostrap and configure xrdp
   shell: ./bootstrap && ./configure
   args:
     chdir: /tmp/xrdp
+  when: not xrdp.stat.exists
 
 - name: make xrdp
   make:
     chdir: /tmp/xrdp
     target: all
+  when: not xrdp.stat.exists
 
 - name: make install xrdp
   become: yes
   make:
     chdir: /tmp/xrdp
     target: install
+  when: not xrdp.stat.exists
 
 - name: Boostrap and configure xorgxrdp
   shell: ./bootstrap && ./configure XRDP_CFLAGS=-I~/git/neutrino/xrdp/common XRDP_LIBS=" "
   args:
     chdir: /tmp/xorgxrdp
+  when: not xrdp.stat.exists
 
 - name: make xorgxrdp
   make:
     chdir: /tmp/xorgxrdp
     target: all
+  when: not xrdp.stat.exists
 
 - name: make install xorgxrdp
   become: yes
   make:
     chdir: /tmp/xorgxrdp
     target: install
+  when: not xrdp.stat.exists
 
 - name: Copying xinitrc.d scripts
   become: yes

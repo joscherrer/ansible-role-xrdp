@@ -6,8 +6,6 @@ reload_xresources() {
     done
 }
 
-if [ ! -d "$HOME/.config/Xresources/" ]; then
-    exit 0
+if [ -d "$HOME/.config/Xresources/" ]; then
+    reload_xresources
 fi
-
-reload_xresources
