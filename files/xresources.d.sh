@@ -1,7 +1,7 @@
 #!/bin/sh
 
 reload_xresources() {
-    for file in "$HOME"/.config/Xresources/* ; do
+    for file in "$HOME"/.config/Xresources/*.xr ; do
         xrdb -merge "${file}"
     done
 }
