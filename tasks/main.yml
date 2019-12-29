@@ -46,14 +46,15 @@
     chdir: /tmp/xorgxrdp
     target: install
 
-# - name: Modify startwm.sh (RedHat)
-#   copy:
-#     dest: /etc/xrdp/startwm.sh
-#     src: files/startwm.rhel.sh
-#     owner: root
-#     group: root
-#     mode: 0755
-#   when: ansible_os_family == "RedHat"
+- name: Add .xinitrc loading script (RedHat)
+  become: yes
+  copy:
+    dest: /etc/X11/xinit/xinitrc.d/localxinitrc.sh
+    src: files/localxinitrc.sh
+    owner: root
+    group: root
+    mode: 0755
+  when: ansible_os_family == "RedHat"
 
 - name: Start and enable xrdp
   become: yes
