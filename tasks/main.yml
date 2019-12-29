@@ -46,15 +46,16 @@
     chdir: /tmp/xorgxrdp
     target: install
 
-- name: Add .xinitrc loading script (RedHat)
+- name: Copying xinitrc.d scripts
   become: yes
   copy:
-    dest: /etc/X11/xinit/xinitrc.d/localxinitrc.sh
-    src: files/localxinitrc.sh
+    dest: /etc/X11/xinit/xinitrc.d/
+    src: "{{ item }}"
     owner: root
     group: root
     mode: 0755
-  when: ansible_os_family == "RedHat"
+  with_fileglob:
+    - files/*
 
 - name: Start and enable xrdp
   become: yes
