@@ -1,2 +1,7 @@
 ---
 # defaults file for ansible-role-xrdp
+
+user_list:
+  - jscherrerl
+  - jscherrer
+  - scherrjo2

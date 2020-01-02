@@ -68,7 +68,56 @@
     group: root
     mode: 0755
   with_fileglob:
-    - files/*
+    - files/etc_xinit/*
+
+- name: Getting passwd info
+  getent:
+    database: passwd
+
+- name: Create initial .xinitrc
+  become: true
+  copy:
+    dest: "{{ getent_passwd[item][4] }}/.xinitrc"
+    src: files/.xinitrc
+    owner: "{{ item }}"
+    group: "{{ item }}"
+    mode: 0755
+    force: no
+  loop: "{{ user_list }}"
+  when: item in getent_passwd
+
+- name: Check .xinitrc permissions
+  become: true
+  file:
+    path: "{{ getent_passwd[item][4] }}/.xinitrc"
+    owner: "{{ item }}"
+    group: "{{ item }}"
+    mode: 0755
+  loop: "{{ user_list }}"
+  when: item in getent_passwd
+
+- name: Link .xsession to .xinitrc
+  become: true
+  file:
+    src: "{{ getent_passwd[item][4] }}/.xinitrc"
+    path: "{{ getent_passwd[item][4] }}/.xsession"
+    owner: "{{ item }}"
+    group: "{{ item }}"
+    mode: 0755
+    state: link
+  loop: "{{ user_list }}"
+  when: item in getent_passwd
+
+- name: Create user xinitrc.d
+  become: true
+  file:
+    path: "{{ getent_passwd[item][4] }}/.xinitrc.d"
+    owner: "{{ item }}"
+    group: "{{ item }}"
+    mode: 0755
+    state: directory
+  loop: "{{ user_list }}"
+  when: item in getent_passwd
 
 - name: Start and enable xrdp
   become: yes
