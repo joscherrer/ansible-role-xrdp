@@ -4,11 +4,11 @@
 # You should name the scripts like this : 0000-scriptname.sh
 # With the file loading the wm named 9999-scriptname.sh
 
-shopt -s nullglob
-globconf=$(echo "$HOME"/.xinitrc.d/*.sh)
+if [ -d "$HOME"/.xinitrc.d/ ]; then
+    shopt -s nullglob
+    files=($(ls "$HOME"/.xinitrc.d/ | egrep '[0-9]{4}-(.*?).sh'))
 
-if [ -n "${globconf}" ]; then
-    for scr in "$HOME"/.xinitrc.d/*.sh; do
-        . $scr
+    for scr in "${files[@]}"; do
+        . "$HOME"/.xinitrc.d/"$scr"
     done
 fi
