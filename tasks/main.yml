@@ -9,14 +9,14 @@
   register: xrdp
 
 - name: Retrieving xrdp
-  git:
+  git: # noqa 401
     repo: https://github.com/neutrinolabs/xrdp.git
     dest: /tmp/xrdp
     recursive: yes
   when: not xrdp.stat.exists
 
 - name: Retrieving xorgxrdp
-  git:
+  git: # noqa 401
     repo: https://github.com/neutrinolabs/xorgxrdp.git
     dest: /tmp/xorgxrdp
   when: not xrdp.stat.exists

@@ -1,7 +1,7 @@
-Role Name
+ansible-role-xrdp
 =========
 
-A brief description of the role goes here.
+This role installs xrdp
 
 Requirements
 ------------
@@ -16,7 +16,7 @@ A description of the settable variables for this role should go here, including 
 Dependencies
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+geerlingguy.git
 
 Example Playbook
 ----------------
@@ -30,9 +30,9 @@ Including an example of how to use your role (for instance, with variables passe
 License
 -------
 
-BSD
+MIT
 
 Author Information
 ------------------
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+Jonathan Scherrer

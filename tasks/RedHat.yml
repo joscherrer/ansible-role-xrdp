@@ -5,7 +5,7 @@
     state: present
   loop:
     - finger
-    - cmake 
+    - cmake
     - patch
     - gcc
     - make
@@ -51,7 +51,7 @@
     state: enabled
   register: rdp_udp
 
-- name: Reloading firewall-cmd
+- name: Reloading firewall-cmd # noqa 503
   become: yes
-  shell: firewall-cmd --reload
+  command: firewall-cmd --reload
   when: rdp_tcp.changed or rdp_udp.changed
